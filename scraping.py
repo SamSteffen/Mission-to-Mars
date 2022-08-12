@@ -1,4 +1,5 @@
 # Import Splinter and BeautifulSoup
+from distutils.log import error
 from splinter import Browser
 from bs4 import BeautifulSoup as soup
 from webdriver_manager.chrome import ChromeDriverManager
@@ -18,7 +19,8 @@ def scrape_all():
       "news_paragraph": news_paragraph,
       "featured_image": featured_image(browser),
       "facts": mars_facts(),
-      "last_modified": dt.datetime.now()
+      "last_modified": dt.datetime.now(),
+      "hemisphere_image_urls": hemisphere_image_urls
     }
 
     # Stop webdriver and return data
@@ -98,6 +100,72 @@ def mars_facts():
     df.set_index('description', inplace=True)
     
     return df.to_html()
+
+#create a function to scrape the hemisphere data using code from Mission_to_Mars_Challenge.py
+def hemisphere_data():
+
+    #visit url
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+
+    # 2. Create a list to hold the images and titles.
+    hemisphere_image_urls = []
+
+    # 3. Write code to retrieve the image urls and titles for each hemisphere.
+    #parse the webpage into html
+    html = browser.html
+    mars_soup = soup(html, 'html.parser')
+
+    #REFERENCE: https://splinter.readthedocs.io/en/latest/elements-in-the-page.html
+    #use the 'a' tags to navigate towards the clickable hrefs of the titular links
+    a_tags = mars_soup.find_all('a', 'itemLink product-item')
+
+    #add the hyperlink reference from each a_tag to a list using a for loop
+    h_refs = []
+    for each in a_tags[:8]:
+        if each['href'] not in h_refs:
+            h_refs.append(each['href'])
+        else:
+            continue
+        
+    # create a for loop to pass the hrefs into the url 
+    for h_ref in h_refs:
+
+        # create an empty dictionary, 'hemispheres'
+        hemispheres = {}
+    
+        #generate a complete url using each href for each image and click it  
+        browser.visit(f'https://marshemispheres.com/{h_ref}')
+    
+        #parse the html on the new page
+        html2 = browser.html
+        img_soup = soup(html2, 'html.parser')
+
+        try:
+            #find the title and set it to a variable
+            title = img_soup.find("h2", class_="title").text
+        
+            #retrieve the url and set it to a variable
+            partial_url = img_soup.find('img', class_='wide-image').get('src')
+        
+        except AttributeError:
+            return None
+        
+        url = f'https://spaceimages-mars.com/{partial_url}'
+    
+        #add the scraped title and url variables to the dictionary
+        hemispheres['title'] = title
+        hemispheres['url'] = url
+        
+        #add the dictionary to the dictionary list
+        hemisphere_image_urls.append(hemispheres)
+       
+        #navigate back to the main page
+        browser.back()
+
+    # 4. Print the list that holds the dictionary of each image url and title.
+    return hemisphere_image_urls
+
 
 if __name__ == "__main__":
     #if running as script, print scraped data
