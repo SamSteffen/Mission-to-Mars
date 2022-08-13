@@ -110,7 +110,7 @@ for h_ref in h_refs:
     title = img_soup.find("h2", class_="title").text
         
     #retrieve the url and set it to a variable
-    partial_url = img_soup.find('img', class_='wide-image').get('src')
+    partial_url = img_soup.find_all('li')[0].a.get('href')
     url = f'https://spaceimages-mars.com/{partial_url}'
     
     #add the scraped title and url variables to the dictionary

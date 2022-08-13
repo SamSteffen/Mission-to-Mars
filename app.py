@@ -1,5 +1,5 @@
 #create a web app that ties web-scraped html to a Mongo database
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request, abort
 from flask_pymongo import PyMongo
 import scraping
 

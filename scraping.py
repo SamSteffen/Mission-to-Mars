@@ -20,7 +20,7 @@ def scrape_all():
       "featured_image": featured_image(browser),
       "facts": mars_facts(),
       "last_modified": dt.datetime.now(),
-      "hemisphere_image_urls": hemisphere_image_urls
+      "hemispheres": hemisphere_data(browser)
     }
 
     # Stop webdriver and return data
@@ -58,6 +58,7 @@ def mars_news(browser):
         return None, None
 
     return news_title, news_p
+ 
 # ## JPL Space Images Featured Image
 
 #add function to refactor code
@@ -102,20 +103,20 @@ def mars_facts():
     return df.to_html()
 
 #create a function to scrape the hemisphere data using code from Mission_to_Mars_Challenge.py
-def hemisphere_data():
-
-    #visit url
-    url = 'https://marshemispheres.com/'
-    browser.visit(url)
+def hemisphere_data(browser):
 
     # 2. Create a list to hold the images and titles.
     hemisphere_image_urls = []
-
+    
+    #visit url
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+    
     # 3. Write code to retrieve the image urls and titles for each hemisphere.
     #parse the webpage into html
     html = browser.html
     mars_soup = soup(html, 'html.parser')
-
+    
     #REFERENCE: https://splinter.readthedocs.io/en/latest/elements-in-the-page.html
     #use the 'a' tags to navigate towards the clickable hrefs of the titular links
     a_tags = mars_soup.find_all('a', 'itemLink product-item')
@@ -136,17 +137,24 @@ def hemisphere_data():
     
         #generate a complete url using each href for each image and click it  
         browser.visit(f'https://marshemispheres.com/{h_ref}')
-    
+                
         #parse the html on the new page
-        html2 = browser.html
-        img_soup = soup(html2, 'html.parser')
+        try:
+            html2 = browser.html
+            img_soup = soup(html2, 'html.parser')
+        except NameError:
+            return None
 
         try:
             #find the title and set it to a variable
             title = img_soup.find("h2", class_="title").text
         
+        except AttributeError:
+            return None
+        
+        try:
             #retrieve the url and set it to a variable
-            partial_url = img_soup.find('img', class_='wide-image').get('src')
+            partial_url = img_soup.find_all('li')[0].a.get('href')
         
         except AttributeError:
             return None
