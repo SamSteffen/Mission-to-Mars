@@ -18,7 +18,7 @@ To retrieve these images, we added a script to our previous Python code to visit
 
 We then refactored the above code to create a function, which was added to our scraping.py file. To make sure the code was working properly we activated Mongo and were able to see the data in our Mongo database:
 
-[mongo image]
+![Mongodb_w_scraped_images](https://user-images.githubusercontent.com/104729703/184711933-9aa97491-c1a3-4129-a87c-9df6f6c440c7.png)
 
 # Results
 
@@ -30,5 +30,6 @@ We further modified our webpage html to include bootstrap features to accommodat
 
 Running the app.py file attached above in the GitBash terminal will yield the following webpage:
 
-[webpage image]
+![Webpage_complete](https://user-images.githubusercontent.com/104729703/184711981-dcc286f9-85e3-495b-8b02-2747182adbd4.png)
+
 
