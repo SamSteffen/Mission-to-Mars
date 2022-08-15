@@ -14,14 +14,21 @@ We then wrote a Python script that uses Flask dependencies to tie our web-scrape
 Once the results of our webscraping functions were saved, we used Bootstrap to change the formatting and provide a cleaner presentation of the results. We then further modified our webpage by adding additional full-size images of Mars.
 
 # Summary
-To retrieve these images, we added a script to our previous Python code to visit another webpage, https://marshemispheres.com/, which contains links to seperate webpages with full-size images and urls. Using a for loop, we scraped the full-size image urls and the image titles into a dictionary, and then placed the dictionaries into an iterable list. 
+To retrieve these images, we added a script to our previous Python code to visit another webpage, https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars, which contains links to seperate webpages with full-size images and urls. Using a for loop, we scraped the full-size image urls and the image titles into a dictionary, and then placed the dictionaries into an iterable list. 
 
 We then refactored the above code to create a function, which was added to our scraping.py file. To make sure the code was working properly we activated Mongo and were able to see the data in our Mongo database:
 
 [mongo image]
 
 # Results
+
 We further modified our webpage html to include bootstrap features to accommodate the new images, including:
-- .img-thumbnail class, which shapes our very large images into thumbnails.
-- class="mx-auto d-block" which keeps the image centered.
-- class="jumbotron jumbotron-fluid" which adjusts the size of the jumbotron to accommodate different screen sizes.
+- .img-thumbnail class, which shapes our very large images into thumbnails;
+- class="col-md-9" for the title of the scraped images section ("Mars Hemispheres"), which will span 3/4 of the the page;
+- class="col-md-3" for the image thumbnail which allows for the scraped images to appear as thumnails on a single row on our webpage.
+- I also added the url as the href so that the titles are clickable as links.
+
+Running the app.py file attached above in the GitBash terminal will yield the following webpage:
+
+[webpage image]
+

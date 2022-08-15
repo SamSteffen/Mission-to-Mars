@@ -109,7 +109,7 @@ def hemisphere_data(browser):
     hemisphere_image_urls = []
     
     #visit url
-    url = 'https://marshemispheres.com/'
+    url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(url)
     
     # 3. Write code to retrieve the image urls and titles for each hemisphere.
@@ -136,7 +136,7 @@ def hemisphere_data(browser):
         hemispheres = {}
     
         #generate a complete url using each href for each image and click it  
-        browser.visit(f'https://marshemispheres.com/{h_ref}')
+        browser.visit(f'https://astrogeology.usgs.gov/{h_ref}')
                 
         #parse the html on the new page
         try:
@@ -154,13 +154,11 @@ def hemisphere_data(browser):
         
         try:
             #retrieve the url and set it to a variable
-            partial_url = img_soup.find_all('li')[0].a.get('href')
+            url = img_soup.find_all('li')[0].a.get('href')
         
         except AttributeError:
             return None
-        
-        url = f'https://spaceimages-mars.com/{partial_url}'
-    
+           
         #add the scraped title and url variables to the dictionary
         hemispheres['title'] = title
         hemispheres['url'] = url
